@@ -4,16 +4,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.ImageObserver;
+
+import static java.lang.Math.*;
 
 public class MainFrame1 extends JFrame {
-    private static final int WIDTH =400;//размеры окон
-    private static final int HEIGHT=320;
+    private static final int WIDTH =900;//размеры окон
+    private static final int HEIGHT=600;
     private static Double sum =0.0;
     private JTextField textFieldX;// текстовые поля для считывания значения переменных
     private JTextField textFieldY;
     private JTextField textFieldZ;
     private JTextField textFieldResult; // текстовые поля для отображения результата
     private JTextField textFieldResultSum;
+    private JLabel imageType;
     private ButtonGroup radioButtons =new ButtonGroup();//радиокнопки
     private Box hboxFormulaType=Box.createHorizontalBox(); //контейнер для отображения радиокнопок
     private ButtonGroup radioMemoryButtons = new ButtonGroup();
@@ -28,12 +32,42 @@ public class MainFrame1 extends JFrame {
     //Формула №1
     private Double formula1(Double x,Double y,Double z)
     {
-        return x+y;
+        if (y <= 0)	{
+            JOptionPane.showMessageDialog(MainFrame1.this,
+                    "y должен быть положительным", "" +
+                            "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
+            return 0.0;
+        }
+        if ((pow(x,2)+ sin(z)+exp(cos(z))) < 0)	{
+            JOptionPane.showMessageDialog(MainFrame1.this,
+                    "выражение под корнем должно быть положительным", "" +
+                            "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
+            return 0.0;
+        }
+        return sin(log(y)+ sin(Math.PI*pow(y,2)))* pow(pow(x,2)+ sin(z)+exp(cos(z)),1/4);
     }
     //Формула №2
     private Double formula2(Double x,Double y,Double z)
     {
-        return x-y;
+        if (y == -1)	{
+            JOptionPane.showMessageDialog(MainFrame1.this,
+                    "y должен не ровняться -1", "" +
+                            "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
+            return 0.0;
+        }
+        if (x <= 0)	{
+            JOptionPane.showMessageDialog(MainFrame1.this,
+                    "x должен быть положительным", "" +
+                            "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
+            return 0.0;
+        }
+        if ((exp(cos(x))+pow(sin(Math.PI*z),2)) < 0)	{
+            JOptionPane.showMessageDialog(MainFrame1.this,
+                    "выражение под корнем должно быть положительным", "" +
+                            "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
+            return 0.0;
+        }
+        return pow(cos(exp(x))+log(pow(1+y,2))+pow(exp(cos(x))+pow(sin(Math.PI*z),2),1/2)+pow(1/x,1/2)+cos(pow(y,2)),sin(z));
     }
 //метод для добавления кнопок на панель
     private void addRadioButtons(String buttonName,final int formulaID)
@@ -43,6 +77,11 @@ public class MainFrame1 extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainFrame1.this.formulaID=formulaID;
+                if (formulaID==1)
+                    imageType.setIcon(new ImageIcon(MainFrame1.class.getResource("f1.png")));
+                if (formulaID==2)
+                    imageType.setIcon(new ImageIcon(MainFrame1.class.getResource("f2.png")));
+
             }
         });
         radioButtons.add(button);
@@ -76,6 +115,15 @@ public class MainFrame1 extends JFrame {
        radioButtons.setSelected( radioButtons.getElements().nextElement().getModel(),true);
        hboxFormulaType.add(Box.createHorizontalGlue());
        hboxFormulaType.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        Box picture = Box.createHorizontalBox();                    // область с картинкой
+        picture.add(Box.createVerticalGlue());
+        picture.add(Box.createHorizontalGlue());
+        imageType = new JLabel(new ImageIcon(MainFrame1.class.getResource("f1.png")));
+        picture.add(imageType);
+        picture.add(Box.createHorizontalGlue());
+        picture.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+
         //Область с полями ввода X, Y, Z
         JLabel labelForX=new JLabel("X:");
         textFieldX=new JTextField("0",10);
@@ -218,32 +266,19 @@ public class MainFrame1 extends JFrame {
         hBoxControlButtons.add(buttonMp);
         hBoxControlButtons.add(Box.createHorizontalGlue());
 
-//Создать коробку с горизонтальной укладкой
         Box hboxButtons = Box.createHorizontalBox();
-//Добавить «клей» C4-H1 с левой стороны
         hboxButtons.add(Box.createHorizontalGlue());
-//Добавить кнопку «Вычислить» в компоновку
         hboxButtons.add(buttonCalc);
-//Добавить распорку в 30 пикселов C4-H2 между кнопками
         hboxButtons.add(Box.createHorizontalStrut(30));
-//Добавить кнопку «Очистить поля» в компоновку
         hboxButtons.add(buttonReset);
-//Добавить «клей» C4-H3 с правой стороны
         hboxButtons.add(Box.createHorizontalGlue());
-//Задать рамку для контейнера
         hboxButtons.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 
 
-// Связать области воедино в компоновке BoxLayout
-//Создать контейнер «коробка с вертикальной укладкой»
         Box contentBox = Box.createVerticalBox();
-//Добавить «клей» V1 сверху
         contentBox.add(Box.createVerticalGlue());
-// Добавить контейнер с выбором формулы
         contentBox.add(hboxFormulaType);
-// картинка формулы
-
-//Добавить контейнер с переменными
+        contentBox.add(imageType);
         contentBox.add(hboxVariables);
 //Добавить контейнер с результатом вычислений
         contentBox.add(hboxResult);
