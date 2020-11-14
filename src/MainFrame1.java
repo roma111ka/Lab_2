@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.image.ImageObserver;
 
 import static java.lang.Math.*;
 
@@ -30,42 +29,42 @@ public class MainFrame1 extends JFrame {
     private Double mem3 = (double) 0;
 
     //Формула №1
-    private Double formula1(Double x,Double y,Double z)
+    private double formula1(Double x, Double y, Double z)
     {
         if (y <= 0)	{
             JOptionPane.showMessageDialog(MainFrame1.this,
-                    "y должен быть положительным", "" +
+                    "У должен быть положительным", "" +
                             "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
-            return 0.0;
+            return 0;
         }
-        if ((pow(x,2)+ sin(z)+exp(cos(z))) < 0)	{
+        if ((x*x+ sin(z)+exp(cos(z))) < 0)	{
             JOptionPane.showMessageDialog(MainFrame1.this,
-                    "выражение под корнем должно быть положительным", "" +
+                    "Выражение под корнем должно быть положительным", "" +
                             "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
-            return 0.0;
+            return 0;
         }
-        return sin(log(y)+ sin(Math.PI*pow(y,2)))* pow(pow(x,2)+ sin(z)+exp(cos(z)),1/4);
+        return sin(log(y)+ sin((Math.PI)*y*y))* pow(pow(x,2)+ sin(z)+exp(cos(z)),1/4);
     }
     //Формула №2
-    private Double formula2(Double x,Double y,Double z)
+    private double formula2(Double x, Double y, Double z)
     {
         if (y == -1)	{
             JOptionPane.showMessageDialog(MainFrame1.this,
-                    "y должен не ровняться -1", "" +
+                    "У должен не ровняться -1", "" +
                             "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
-            return 0.0;
+            return 0;
         }
         if (x <= 0)	{
             JOptionPane.showMessageDialog(MainFrame1.this,
-                    "x должен быть положительным", "" +
+                    "Х должен быть положительным", "" +
                             "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
-            return 0.0;
+            return 0;
         }
         if ((exp(cos(x))+pow(sin(Math.PI*z),2)) < 0)	{
             JOptionPane.showMessageDialog(MainFrame1.this,
-                    "выражение под корнем должно быть положительным", "" +
+                    "Выражение под корнем должно быть положительным", "" +
                             "Ошибка ввода", JOptionPane.WARNING_MESSAGE);
-            return 0.0;
+            return 0;
         }
         return pow(cos(exp(x))+log(pow(1+y,2))+pow(exp(cos(x))+pow(sin(Math.PI*z),2),1/2)+pow(1/x,1/2)+cos(pow(y,2)),sin(z));
     }
@@ -178,8 +177,9 @@ public class MainFrame1 extends JFrame {
             public void actionPerformed(ActionEvent ev) {
                 try {
                     Double x = Double.parseDouble(textFieldX.getText());
-                    Double z = Double.parseDouble(textFieldY.getText());
-                    Double y = Double.parseDouble(textFieldZ.getText());
+                    Double y = Double.parseDouble(textFieldY.getText());
+                    Double z = Double.parseDouble(textFieldZ.getText());
+
                     Double result;
                     if (formulaID == 1) {
                         result = formula1(x, y, z);
@@ -204,7 +204,7 @@ public class MainFrame1 extends JFrame {
         //Добавить «клей» C1-H2 с правой стороны
         hBoxMemoryType.add(Box.createHorizontalGlue());
         //Задать рамку для коробки с помощью класса BorderFactory
-        hBoxMemoryType.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
+        hBoxMemoryType.setBorder(BorderFactory.createLineBorder(Color.black ));
 
 //Создать кнопку «Очистить поля»
         JButton buttonReset = new JButton("Очистить поля");
@@ -272,7 +272,7 @@ public class MainFrame1 extends JFrame {
         hboxButtons.add(Box.createHorizontalStrut(30));
         hboxButtons.add(buttonReset);
         hboxButtons.add(Box.createHorizontalGlue());
-        hboxButtons.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+        hboxButtons.setBorder(BorderFactory.createLineBorder(Color.red));
 
 
         Box contentBox = Box.createVerticalBox();
